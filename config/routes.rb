@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'users/new'
+
 =begin
   root 'stranice#home'
   get  'stranice/help'
@@ -8,6 +10,8 @@ Rails.application.routes.draw do
 =end
 
 Rails.application.routes.draw do
+  get 'users/new'
+
   root             'stranice#home'
   get 'help'    => 'stranice#help'
   get 'about'   => 'stranice#about'
