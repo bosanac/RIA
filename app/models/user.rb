@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   
   #add_index :users, :email, unique: true
 
+ # validate :validateName
   validates :name,  presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 },
@@ -28,4 +29,17 @@ class User < ActiveRecord::Base
       t.timestamps null: false
     end
   end
+  
+  
+  def validateName
+    if :name.present?
+      errors.add(:name,"Morate popuniti Login name")
+    end
+    
+    if :name.present? && :name.size > 50
+      errors.add(:name,"Login name ne smije biti veci od 50")
+    end
+  end
+  
+  
 end
