@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'about'   => 'stranice#about'
   get 'contact' => 'stranice#contact'
   get 'singup'  => 'users#new'
+  resources :users
 end
 
   # The priority is based upon order of creation: first created -> highest priority.
