@@ -1,13 +1,24 @@
 Rails.application.routes.draw do
-  get 'stranice/home'
 
-  get 'stranice/help'
+=begin
+  root 'stranice#home'
+  get  'stranice/help'
+  get  'stranice/about'
+  get  'stranice/contact'
+=end
+
+Rails.application.routes.draw do
+  root             'stranice#home'
+  get 'help'    => 'stranice#help'
+  get 'about'   => 'stranice#about'
+  get 'contact' => 'stranice#contact'
+end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'stranice#home'
+  # root 'stranice#home'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
