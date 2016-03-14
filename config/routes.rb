@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   
 
+  get 'sessions/new'
+
 =begin
   root 'stranice#home'
   get  'stranice/help'
@@ -10,6 +12,8 @@ Rails.application.routes.draw do
 =end
 
 Rails.application.routes.draw do
+  get 'sessions/new'
+
   get 'users/new'
 
   root             'stranice#home'
@@ -17,6 +21,12 @@ Rails.application.routes.draw do
   get 'about'   => 'stranice#about'
   get 'contact' => 'stranice#contact'
   get 'singup'  => 'users#new'
+  
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+
+  
   resources :users
 end
 
