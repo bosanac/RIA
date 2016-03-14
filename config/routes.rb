@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   
 
   get 'sessions/new'
-
+  get 'users/edit'
 =begin
   root 'stranice#home'
   get  'stranice/help'
