@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'users/new'
+  
 
 =begin
   root 'stranice#home'
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'help'    => 'stranice#help'
   get 'about'   => 'stranice#about'
   get 'contact' => 'stranice#contact'
+  get 'singup'  => 'users#new'
 end
 
   # The priority is based upon order of creation: first created -> highest priority.
