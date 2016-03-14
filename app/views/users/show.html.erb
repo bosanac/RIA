@@ -1,1 +1,6 @@
-<%= @user.name %>, <%= @user.email %>
+<% provide(:title, @user.name) %>
+<h1>
+  <%= # Vraca gavatar funkcija se nalazi u users_helper.rb
+  gravatar_for @user %>
+  <%= @user.name %>
+</h1>
