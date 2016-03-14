@@ -7,4 +7,11 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  
+  # Vraca TRUE ukoliko je testni korisnik logovan na sistem
+  def is_logged_in?
+    !session[:user_id].nil?
+  end
+
+  
 end

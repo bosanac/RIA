@@ -19,6 +19,7 @@ class UsersController < ApplicationController
     
     if @user.save
     # Uspjesno popunjen i sacuvan korisnik
+      log_in @user
       flash[:success] = "Dobro dosli, uspjesno ste kreirali korisnicki nalog!"
       redirect_to @user
     else
