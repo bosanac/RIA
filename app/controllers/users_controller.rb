@@ -38,7 +38,7 @@ class UsersController < ApplicationController
       redirect_to @user
     else
     # Nije uspjesno sacuvan korisnik
-    flash[:success]
+    # flash[:danger] = "Nije dobro popunjen"
     render 'new'
     end
   end
