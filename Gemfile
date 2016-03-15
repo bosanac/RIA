@@ -29,6 +29,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+# Gem za dodavanje laznih fiktivnih korisnicnik nalogas
+gem 'faker',  '~> 1.4.2'
+
+# Gemovi za paginaciju na stranici
+gem 'will_paginate',           '3.0.7'
+gem 'bootstrap-will_paginate', '0.0.10'
+# Gemovi za prikazivanje paging na stranici za vise stavki
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
