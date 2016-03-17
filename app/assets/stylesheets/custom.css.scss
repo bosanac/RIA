@@ -10,7 +10,7 @@
   color: #fff;
   text-transform: uppercase;
   letter-spacing: -1px;
-  padding-top: 9px;
+  padding-top: 15px;
   font-weight: bold;
 }
 
@@ -183,3 +183,17 @@ input {
     color: $state-danger-text;
   }
 }
+
+/* lista korisnika prikaz */
+/* Users index */
+
+.users {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-bottom: 1px solid $gray-lighter;
+  }
+}
+

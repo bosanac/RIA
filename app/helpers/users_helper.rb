@@ -1,5 +1,5 @@
 module UsersHelper
-require 'users_helper'
+
   # Vraca Gavatar za datog korisnika
   def gravatar_for(user)
     gravatar_id = Digest::MD5::hexdigest(user.email.downcase)

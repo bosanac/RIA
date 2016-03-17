@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
-<<<<<<< HEAD
   before_action :logged_in_user, only: [:edit, :update]
-    before_action :correct_user,   only: [:edit, :update]
+  before_action :correct_user, only: [:edit, :update]
 
  def index
   # @users = User.all
@@ -10,8 +9,6 @@ class UsersController < ApplicationController
   @users = User.paginate(page: params[:page])
  end
 
-=======
->>>>>>> parent of 6963a2b... Zavrseno prikaz svih korisnika
   def show
     @user = User.find(params[:id])
     
@@ -41,7 +38,7 @@ class UsersController < ApplicationController
       redirect_to @user
     else
     # Nije uspjesno sacuvan korisnik
-    flash[:success]
+    # flash[:danger] = "Nije dobro popunjen"
     render 'new'
     end
   end
@@ -50,10 +47,29 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       # Handle a successful update.
+      flash[:success] = "Uspjesno izmjenjen profil!"
+      redirect_to @user
     else
       render 'edit'
     end
   end
+  
+      # Before filters
+
+    # Confirms a logged-in user.
+    def logged_in_user
+      unless logged_in?
+        store_location
+        flash[:danger] = "Please log in."
+        redirect_to login_url
+      end
+    end
+    
+     # Confirms the correct user.
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to(root_url) unless @user == current_user
+    end
   
   private
 
