@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  naslov: MyString
+  opis: MyText
+  datumstart: 2016-03-17 00:43:57
+  datumstop: 2016-03-17 00:43:57
+  pokusaja: 1
+
+two:
+  naslov: MyString
+  opis: MyText
+  datumstart: 2016-03-17 00:43:57
+  datumstop: 2016-03-17 00:43:57
+  pokusaja: 1

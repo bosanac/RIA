@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Naslov:</strong>
+  <%= @quiz.naslov %>
+</p>
+
+<p>
+  <strong>Opis:</strong>
+  <%= @quiz.opis %>
+</p>
+
+<p>
+  <strong>Datumstart:</strong>
+  <%= @quiz.datumstart %>
+</p>
+
+<p>
+  <strong>Datumstop:</strong>
+  <%= @quiz.datumstop %>
+</p>
+
+<p>
+  <strong>Pokusaja:</strong>
+  <%= @quiz.pokusaja %>
+</p>
+
+<%= link_to 'Edit', edit_quiz_path(@quiz) %> |
+<%= link_to 'Back', quizzes_path %>
