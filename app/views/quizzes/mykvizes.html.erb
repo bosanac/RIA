@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Quizzes</h1>
+<h1>Prikaz Vasih kvizova</h1>
 
-<% if !@quizzes.blank? %>
+<% if !@quizzes_my.blank? %>
 <table id="tblListaKvizovi">
   <thead>
     <tr>
@@ -16,22 +16,29 @@
   </thead>
 
   <tbody>
-    <% @quizzes.each do |quiz| %>
+    <% @quizzes_my.each do |quiz| %>
       <tr>
         <td><%= quiz.naziv %></td>
         <td><%= quiz.opis %></td>
         <td><%= quiz.datumstart %></td>
         <td><%= quiz.datumstop %></td>
         <td><%= quiz.pokusaja %></td>
-     <% end %>   
-      </tr>
 
+        <td><%= link_to 'Show', quiz %></td>
+        <td><%= link_to 'Edit', edit_quiz_path(quiz) %></td>
+        <td><%= link_to 'Destroy', quiz, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        
+      </tr>
+    <% end %>
   </tbody>
 </table>
 <% else %>
-<p>Trenutno nema kreiran ni jedan kviz u bazi podataka
+<p>Vi trenutno nemate kreiran ni jedan kviz u bazi podataka
 	<%= link_to 'Kreiraj novi kviz', new_quiz_path %>
 	</p>
 
 <% end %>
+
 <br>
+
+

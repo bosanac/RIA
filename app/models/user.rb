@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   before_save {self.email = email.downcase}
-  
+  #has_many :quizzes
   #add_index :users, :email, unique: true
 
  # validate :validateName

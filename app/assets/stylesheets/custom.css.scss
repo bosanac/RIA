@@ -3,6 +3,8 @@
 
 /* header */
 
+
+
 #logo {
   float: left;
   margin-right: 10px;
@@ -195,5 +197,18 @@ input {
     padding: 10px 0;
     border-bottom: 1px solid $gray-lighter;
   }
+}
+
+/* css za tabelu prikaz kvizova */
+#tblListaKvizovi
+{
+ border: 1px solid red; 
+ margin:0 20%;
+ thead
+ {
+   background: orange;
+ }
+
+ 
 }
 

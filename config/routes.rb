@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'sessions/new'
 
   get 'users/new'
-
+  get 'myquizzes' => 'quizzes#mykvizes'
   root             'stranice#home'
   get 'help'    => 'stranice#help'
   get 'about'   => 'stranice#about'
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
 
-  
+  resources :quizzes
   resources :users
 end
 

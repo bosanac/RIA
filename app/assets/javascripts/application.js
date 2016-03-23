@@ -13,5 +13,21 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= //require bootstrap-datepicker
 //= require_tree .
 //= require bootstrap
+
+$(document).ready(function() {  
+//	alert('test')
+	$('.input-group date').click(function()
+	{
+	//	alert('test dtpPicker');
+		 $(this).datetimepicker();
+		 $('.input-group date').datepicker('update');
+	});
+
+$('.input-daterange input').each(function() {
+    $(this).datepicker("clearDates");
+});
+	
+})
