@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   
 
+  resources :questions
   get 'sessions/new'
   get 'users/edit'
 =begin
@@ -12,10 +13,12 @@ Rails.application.routes.draw do
 =end
 
 Rails.application.routes.draw do
+  resources :questions
   get 'sessions/new'
 
   get 'users/new'
   get 'myquizzes' => 'quizzes#mykvizes'
+  get 'dodajpitanje' => 'questions#dodajpitanje'
   root             'stranice#home'
   get 'help'    => 'stranice#help'
   get 'about'   => 'stranice#about'

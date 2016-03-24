@@ -1,0 +1,32 @@
+<%= form_for(@question) do |f| %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+      <ul>
+      <% @question.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+  	
+  	<% if !@quiz_id_sel.nil? %>
+	    <%= f.label 'ID KVIZA' %>
+	    <%= f.text_field :quiz_id, value: @quiz_id_sel, class: 'form-control'  %>
+	   
+    <% else %>
+   		<%= f.label 'Odaberite neki od vasih kvizova' %>
+  		<%= collection_select(:question, :quiz_id, @quizovi_korisnika, :id, :naziv, prompt: true) %></p>
+	<% end %>
+  </div>
+  <div class="field">
+    <%= f.label 'Tekst pitanja' %><br>
+    <%= f.text_area :pitanje, class: 'form-control' %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
