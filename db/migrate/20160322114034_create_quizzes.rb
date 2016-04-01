@@ -6,6 +6,7 @@ class CreateQuizzes < ActiveRecord::Migration
       t.datetime :datumstart
       t.datetime :datumstop
       t.integer :pokusaja
+      t.boolean :published
       t.belongs_to :user, index: true
 
       t.timestamps null: false

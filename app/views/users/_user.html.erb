@@ -1,5 +1,33 @@
+    
+    <div class="well">
     <li>
-      <%= gravatar_for user #, size: 50 
-      %>
-      <%= link_to user.name, user %>
+    	<div class="row" style="width:100%">
+  <div class="col-sm-3"> 
+  	     
+  	<%= gravatar_for user %>
+    <%= link_to user.name, user %><br />
+    Datum: <%= user.created_at.strftime("%d.%m.%Y") %>
+    <br />
+    <%= link_to "PRIKAZI KVIZOVE", {:controller => "quizzes", :action => "index", :usrid_search => user.id}, :class => "btn btn-warning btn-sm"%>
+   </div>
+  	<div class="col-sm-3">
+		<div class="panel panel-primary" style="margin-top: 7%">
+	  		<div class="panel-heading">KREIRANIH KVIZOVA  <span class="badge" style="float:right"><%= totalKvizova user%></span></div>
+		</div>
+	</div>
+  	
+
+	  	<div class="col-sm-3">
+			<div class="panel panel-primary" style="margin-top: 7%">
+		  		<div class="panel-heading">URADENIH KVIZOVA  <span class="badge" style="float:right"><%= uradenihKvizova user%></span></div>
+			</div>
+		</div>
+
+	  	<div class="col-sm-3">
+			<div class="panel panel-primary" style="margin-top: 7%">
+		  		<div class="panel-heading">BODAVA <span class="badge" style="float:right"><%= totalBodova user%></span></div>
+			</div>
+		</div>
+</div>
     </li>
+    </div>

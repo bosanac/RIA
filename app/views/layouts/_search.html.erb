@@ -1,0 +1,6 @@
+<%= form_tag(putanja, :method => "get", id: "search-form") do %>
+<div class="row">
+  <div class="col-sm-10"><%= text_field_tag :search, params[:search], placeholder: inertext, class: 'form-control' %></div>
+  <div class="col-sm-2"><%= submit_tag "Pretrazi", class: "btn btn-primary"%></div>
+</div>
+<% end %>

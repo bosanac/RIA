@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160324090853) do
+ActiveRecord::Schema.define(version: 20160329094656) do
+
+  create_table "odgovors", force: :cascade do |t|
+    t.text     "opcija",      limit: 65535
+    t.boolean  "tacan"
+    t.integer  "question_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "odgovors", ["question_id"], name: "index_odgovors_on_question_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
     t.text     "pitanje",    limit: 65535
@@ -28,12 +38,27 @@ ActiveRecord::Schema.define(version: 20160324090853) do
     t.datetime "datumstart"
     t.datetime "datumstop"
     t.integer  "pokusaja",   limit: 4
+    t.boolean  "published"
     t.integer  "user_id",    limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
 
   add_index "quizzes", ["user_id"], name: "index_quizzes_on_user_id", using: :btree
+
+  create_table "rezultats", force: :cascade do |t|
+    t.string   "postotak",   limit: 255
+    t.integer  "tacnihodg",  limit: 4
+    t.datetime "dtstart"
+    t.datetime "dtkraj"
+    t.integer  "quiz_id",    limit: 4
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "rezultats", ["quiz_id"], name: "index_rezultats_on_quiz_id", using: :btree
+  add_index "rezultats", ["user_id"], name: "index_rezultats_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",            limit: 255

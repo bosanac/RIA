@@ -2,38 +2,52 @@
 
 <h1>Prikaz Vasih kvizova</h1>
 
-<% if !@quizzes_my.blank? %>
-<table id="tblListaKvizovi">
-  <thead>
+<% if !@quizzes.blank? %>
+
+
+<div class="panel panel-primary">
+  	
+  	<div class="panel-heading">
+		 <div class="row">
+		  <div class="col-sm-12">Prikaz Vasih kvizova</div>
+		</div>
+	</div>
+  	
+  	<div class="panel-body">
+<div class="table-responsive" id="tbl_myquiz">
+<table class="table table-hover table table-bordered " >
+  <thead style="background: black; color:white">
     <tr>
-      <th>Naslov</th>
-      <th>Opis</th>
-      <th>Datumstart</th>
-      <th>Datumstop</th>
-      <th>Pokusaja</th>
-      <th colspan="5">Editovanje</th>
+      <th style="width:70%;">Naslov</th>
+      
+      <th style="width:5%; text-align: center">Q</th>
+      <th colspan="5" style="width:45%;"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @quizzes_my.each do |quiz| %>
-      <tr>
-        <td><%= quiz.naziv %></td>
-        <td><%= quiz.opis %></td>
-        <td><%= quiz.datumstart %></td>
-        <td><%= quiz.datumstop %></td>
-        <td><%= quiz.pokusaja %></td>
-
-        <td><%= link_to 'Show', quiz %></td>
-        <td><%= link_to 'Edit', edit_quiz_path(quiz) %></td>
-        <td><%= link_to 'Destroy', quiz, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <td><%= link_to 'Dodaj pitanje', new_question_path(quiz) %></td>
-        <td><%= link_to "Dodaj pitanje", {:controller => "questions", :action => "new", :quiz_trenutni => quiz.id }%> </td>
-        
-      </tr>
+  	
+    <% @quizzes.each do |quiz| %>
+    <%= render quiz%>
     <% end %>
   </tbody>
 </table>
+
+<%= render 'layouts/btn_new_quiz_pitanje' %>
+
+</div>
+	</div>
+	
+	<div class="panel-footer">
+		
+	</div>
+	
+</div>
+
+
+
+
+
 <% else %>
 <p>Vi trenutno nemate kreiran ni jedan kviz u bazi podataka
 	<%= link_to 'Kreiraj novi kviz', new_quiz_path %>

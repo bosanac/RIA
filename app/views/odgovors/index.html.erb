@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<% if @odgovors.blank? %>
+<p>Nemate pristupa ili pitanje iz kviza nema odgovora</p>
+<% else %>
+
+<h1>Listing Odgovors</h1>
+
+<%= render 'layouts/btn_new_quiz_pitanje'%>
+<br>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+  	<div class="row">
+	  <div class="col-sm-1" ><b>KVIZ: </b></div>
+	  <div class="col-sm-11"><%= nazivKviza_IDPitanja params[:question_id]   %> </div>
+	</div>
+  	<div class="row">
+	  <div class="col-sm-1" ><b>PITANJE: </b></div>
+	  <div class="col-sm-11"><%=  nazivPitanja params[:question_id] %></div>
+	</div>
+	</div>
+  <div class="panel-body">
+  	
+<div class="table">
+<table class="table table-hover table table-bordered">
+  <thead style="background: black; color: white">
+    <tr>
+      <th style="width: 75%">Opcija odgovora na pitanje</th>
+      <th style="text-align: center; width: 5%">Tacan</th>
+      <th colspan="3" style="width: 20%"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @odgovors.each do |odgovor| %>
+      <tr>
+        <td><%= odgovor.opcija %></td>
+        <td style="text-align: center"><%= formatTacanNetaca(odgovor.tacan) %></td>
+        <td><%= link_to 'Show', odgovor, :class => "btn btn-default btn-xs" %></td>
+        <td><%= link_to 'Edit', edit_odgovor_path(odgovor), :class => "btn btn-warning btn-xs" %></td>
+        <td><%= link_to 'Delete', odgovor, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+   </div>
+</div>
+</div>
+<% end %>

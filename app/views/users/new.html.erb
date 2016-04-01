@@ -15,17 +15,17 @@
     <%= render 'poruke_render/error_messages' %>
 
     
-      <%= f.label :name,  "Login name"%>
-      <%= f.text_field :name, class: 'form-control' %>
+      <%= f.label :name,  "Krisnicko ime i prezime"%>
+      <%= f.text_field :name, class: 'form-control', placeholder: "Unesite ime i prezime" %>
 
       <%= f.label :email %>
-      <%= f.email_field :email, class: 'form-control' %>
+      <%= f.email_field :email, class: 'form-control', placeholder: "Vasu email adresu" %>
 
       <%= f.label :password %>
-      <%= f.password_field :password, class: 'form-control' %>
+      <%= f.password_field :password, class: 'form-control', placeholder: "Password za login (minimalno 6 karaktera)" %>
 
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, class: 'form-control' %>
+      <%= f.label :password_confirmation, "Potvrda" %>
+      <%= f.password_field :password_confirmation, class: 'form-control', placeholder: "Potvrdite uneseni password" %>
 
       <%= f.submit "Create my account", class: "btn btn-primary" %>
     <% end %>

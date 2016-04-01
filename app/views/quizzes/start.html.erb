@@ -1,0 +1,62 @@
+<br>
+<div class="panel panel-primary">
+	
+	<div class="panel-heading">
+		<h4><%= @quiz.naziv %></h4>
+	</div>
+
+	
+  <div class="panel-body">
+  	<% @brPitanja = 1 %>
+    <% @question_of_quiz.each do |question| %>
+   
+    <%#if @rbrPitanja.to_i == @brPitanja.to_i 
+    %>
+   
+    
+      <div class="panel panel-primary">
+		  <div class="panel-heading">
+		  	 <h4> <%=@brPitanja%>. <%= question.pitanje %></h4>
+		  	 <% @brPitanja = @brPitanja+1
+		  	  %>
+		  </div>
+		  <div class="panel-body">
+		  		
+		  	<% @odgovori_na_pitanja = getOdgovoreNaPitanje(question.id) %>
+
+		  	<% #@odgovori_na_pitanja.each do |odgovor| 
+		  	%>
+		  	<% @odgovor_cur = @odgovori_na_pitanja[@brPitanja-1]	%>
+		  <%= form_for @odgovor do |f| %>
+		   
+		   <%= #radio_button_tag 'gender', 'male' 
+		   %>
+		  	 <%= f.collection_radio_buttons(:id, @odgovori_na_pitanja, :id, :opcija) %>
+		   <% end %>
+		  			 	  
+		 	  
+		  	</div>
+	  </div>
+	  
+	  <% #else 
+	  %>
+	  <% #@brPitanja = @brPitanja+1 
+	  	%>
+      <% #end 
+      %>
+      
+ <% end %>
+  </div>
+  
+  <div class="panel-footer panel-primary" style="padding-left:40%">
+
+  	<%= link_to "PROVJERI ODGOVRE NA KVIZ", {:controller => "quizzes", :action => "kraj", :id => @quiz.id}, :class => "btn btn-primary"%>
+  	<% #if @rbrPitanja.to_i < @ukupnoPitanja 
+  	%>
+  	<%= #link_to "SLJEDECE PITANJE", {:controller => "quizzes", :action => "start", :id => @quiz.id, :rbr=>@rbrPitanja.to_i + 1}, :class => "btn btn-primary"
+  	%>
+	<% #end 
+	%>
+  </div>
+ 
+</div>

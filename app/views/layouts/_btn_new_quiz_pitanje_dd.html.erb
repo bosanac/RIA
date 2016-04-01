@@ -1,0 +1,9 @@
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dodaj novu stavku
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><%= link_to "DODAJ NOVI KVIZ", new_quiz_path,  :method => :get  %></li>
+    <li><%= link_to "DODAJ NOVO PITANJE", new_question_path,  :method => :get  %></li>
+    <li><%= link_to "DODAJ NOVI ODGOVOR", new_odgovor_path,  :method => :get  %></li>
+  </ul>
+</div>

@@ -2,9 +2,19 @@ Rails.application.routes.draw do
 
   
 
+  resources :odgovors
   resources :questions
   get 'sessions/new'
   get 'users/edit'
+  get 'quizzes/start'
+  get 'quizzes/kraj'
+  
+  
+  post 'quizzes/start' => 'quizzes#start'
+  
+  get 'quizzes/rezultat' => 'quizzes#rezultat'
+  get 'quizzes/prepare_quiz' => 'quizzes#prepare_quiz'
+  
 =begin
   root 'stranice#home'
   get  'stranice/help'
@@ -13,11 +23,14 @@ Rails.application.routes.draw do
 =end
 
 Rails.application.routes.draw do
+  resources :odgovors
   resources :questions
   get 'sessions/new'
 
   get 'users/new'
   get 'myquizzes' => 'quizzes#mykvizes'
+  post 'myquizzes' => 'quizzes#mykvizes'
+  
   get 'dodajpitanje' => 'questions#dodajpitanje'
   root             'stranice#home'
   get 'help'    => 'stranice#help'

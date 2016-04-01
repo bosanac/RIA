@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
 
+
+
 <div class="form-group">
 <%= form_for(@quiz) do |f| %>
 
@@ -17,27 +19,27 @@
   <% end %>
 
     <%= f.label :naziv, "Naziv kviza" %><br>
-    <%= f.text_field :naziv, class: 'form-control' %>
+    <%= f.text_field :naziv, class: 'form-control', placeholder: 'Unesite naziv Vaseg novog kviza' %>
 
     <%= f.label :opis %><br>
-    <%= f.text_area :opis, class: 'form-control' %>
-
-
-
+    <%= f.text_area :opis, class: 'form-control', placeholder: "Unesite opis Vaseg kvizi ili kratko uspustvo" %>
                
         <%= f.label 'Kviz je aktivan OD-DO datuma' %><br>        
- <div class="input-group input-daterange">
- 	<%= f.text_field :datumstart, class: 'form-control' %>
-    <span class="input-group-addon"> DO </span>
-    <%= f.text_field :datumstop, class: 'form-control' %>
 
-</div><br>
+ <div class="input-group input-daterange">
+ 	<%= f.text_field :datumstart, class: 'form-control', placeholder: 'Aktivan OD' %>
+    <span class="input-group-addon"> DO </span>
+    <%= f.text_field :datumstop, class: 'form-control', placeholder: "Aktivan DO"%>
+
+</div>
+
+<br>
 	<!--
     <input type="text" class="form-control" value="2012-04-05">
 	-->
 	
-    <%= f.label 'Broj pokusaja (ostavite prazno ili 0 za neogranicen broj pokusaja)' %><br>
-    <%= f.number_field :pokusaja, class: 'form-control', min: 0 %>
+    <%= f.label 'Broj pokusaja' %><br>
+    <%= f.number_field :pokusaja, class: 'form-control', min: 0, placeholder: "(ostavite prazno ili 0 za neogranicen broj pokusaja)"%>
 
   <!-- <div class="actions"> -->
     <%= f.submit "KREIRAJ KVIZ", class: "btn btn-primary" %>

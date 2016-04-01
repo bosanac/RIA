@@ -20,4 +20,16 @@ module UsersHelper
      
   end
   
+  def totalKvizova(user)
+    Quiz.where(user_id: user.id).count
+  end
+  
+  def uradenihKvizova(user)
+    Rezultat.where(user_id: user.id).count
+  end
+  
+  def totalBodova(user)
+    Rezultat.where(user_id: user.id).sum(:tacnihodg)
+  end
+  
 end

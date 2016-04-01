@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Opcija:</strong>
+  <%= @odgovor.opcija %>
+</p>
+
+<p>
+  <strong>Tacan:</strong>
+  <%= @odgovor.tacan %>
+</p>
+
+<%= link_to 'Edit', edit_odgovor_path(@odgovor) %> |
+<%= link_to 'Back', odgovors_path %>

@@ -4,7 +4,6 @@
 /* header */
 
 
-
 #logo {
   float: left;
   margin-right: 10px;
@@ -186,16 +185,22 @@ input {
   }
 }
 
+.pagination
+{
+  margin: 0px;
+}
+
 /* lista korisnika prikaz */
 /* Users index */
 
 .users {
   list-style: none;
   margin: 0;
+  padding: 0;
   li {
     overflow: auto;
-    padding: 10px 0;
-    border-bottom: 1px solid $gray-lighter;
+    padding: 0px 0;
+    //border-bottom: 1px solid $gray-lighter;
   }
 }
 
@@ -212,7 +217,70 @@ input {
  {
    width:auto;
  }
+}
+
+#odgovor_tacan
+{
+  border: 1px solid red;
+  padding-top:-20px;
+}
 
  
+ 
+ 
+
+
+#new_odgovor {
+  //max-width:400px;
+  //margin:94px auto 0 auto;
+  //border:1px solid gray;
 }
+
+#new_odgovor input[type="radio"] {
+  position: relative;
+  opacity: 0;
+  -moz-opacity: 0;
+  -webkit-opacity: 0;
+  -o-opacity: 0;
+  border: 1px solid blue;
+}
+
+#new_odgovor input[type="radio"] + label {
+  position: relative;
+  padding: 0 0 0 0px;
+  font-size: 16px;
+  line-height: 25px;
+  margin:0 0 0px 0;
+  
+  // okvri oko odgovora
+  //border: 1px solid #337AB7;
+  margin-left: 20px;
+  width:98%;
+}
+
+#new_odgovor input[type="radio"] + label:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 2px;
+  height: 20px;
+  width: 20px;
+  background: white;
+  border:1px solid #337AB7;
+  margin-left:-25px;
+  
+  box-shadow: inset 0px 0px 0px 2px white;
+  -webkit-box-shadow: inset 0px 0px 0px 2px white;
+  -moz-box-shadow: inset 0px 0px 0px 2px white;
+  -o-box-shadow: inset 0px 0px 0px 2px white;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+#new_odgovor input[type="radio"]:checked + label:before {
+  background: #337AB7;
+}
+
+
 

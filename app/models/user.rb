@@ -42,5 +42,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def self.search(search)
+    where("name LIKE ?", "%#{search}%") 
+    #where("opis LIKE ?", "%#{search}%")
+  end
+  
   
 end

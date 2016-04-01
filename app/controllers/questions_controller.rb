@@ -1,9 +1,23 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
+  #before_action :set_kviz, only: [:index]
+  
+  
+  #Client.where("created_at >= :start_date AND created_at <= :end_date",
+  #{start_date: params[:start_date], end_date: params[:end_date]})
+  
+  
   # GET /questions
   # GET /questions.json
   def index
-    @questions = Question.all
+    @questions = Question.where("quiz_id = ?", params[:id_quiz])
+    @odgovoraPoPitanju = Odgovor.group(:question_id).count
+    
+    begin
+      session.delete[:question_id]
+    rescue
+      
+    end
   end
 
   # GET /questions/1
@@ -40,16 +54,22 @@ class QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.json
   def create
+    
     parametri = question_params
     parametri[:quiz_id] = @quiz_id_sel
     @question = Question.new(question_params)
     
+
+    
     respond_to do |format|
+
+      
       if @question.save
         format.html { redirect_to @question, notice: 'Question was successfully created.' }
         format.json { render :show, status: :created, location: @question }
-        !@quiz_id_sel = nil
+        @quiz_id_sel = nil
       else
+        @quizovi_korisnika  = Quiz.where("user_id = ?", session[:user_id])
         format.html { render :new }
         format.json { render json: @question.errors, status: :unprocessable_entity }
       end
@@ -79,6 +99,7 @@ class QuestionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -7,6 +7,11 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 # Dio koda za dodavanje laznih korisnika u tabelu users
+User.create!(name:  "Amer Turcinovic",
+             email: "turcinovic@gmail.com",
+             password:              "turcinovic",
+             password_confirmation: "turcinovic")
+
 User.create!(name:  "Example User",
              email: "example@railstutorial.org",
              password:              "foobar",
@@ -23,3 +28,15 @@ User.create!(name:  "Example User",
 end
 # kraj dijela koda za dodavanje laznih korisnika
 # gornji kod se treba obrisati, u svrhu je testiranja
+
+@brKvizaTemp = 0
+
+10.times do |n|
+  @brKvizaTemp = @brKvizaTemp+1
+ 
+  Quiz.create!(naziv:  "kviz#{@brKvizaTemp}",
+               opis: "kviz#{@brKvizaTemp}",
+               pokusaja: 0,
+               user_id: (@brKvizaTemp-1),
+               published: 0)
+end

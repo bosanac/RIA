@@ -1,0 +1,33 @@
+      
+
+        <td>
+        	      <% if quiz.published %>
+      <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal_<%=quiz.id.to_s %>" ><%= quiz.naziv %></button>	
+      <% else %>
+      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal_<%=quiz.id.to_s %>" ><%= quiz.naziv %></button>	
+      <% end %>
+        	
+        	<div>
+        		<%= render 'layouts/modaldlg.html.erb', naslov: quiz.naziv, tekst: quiz.opis, id_div: "myModal_"+ quiz.id.to_s %>
+        		</div>
+        	
+        </td>
+       
+        <td style="text-align: center; margin-top: 10px;"> <%= link_to formatInt(@brPitanjaPoKvizu[quiz.id]), {:controller => "questions", :action => "index", :id_quiz => quiz.id }, :class => "label label-default" %>  </td>
+        
+        <!-- <td> -->
+        	<%= #button_to "VISE", quiz, :class => "btn btn-default btn-md", :method => :get  
+        %>
+        <!--</td>-->
+        <td><%= button_to "UREDI", edit_quiz_path(quiz), :class => "btn btn-warning btn-sm", :method => :get  %></td>
+        <td><%= button_to "OBRISI", quiz, :class => "btn btn-danger btn-sm", :method => :delete, data: { confirm: 'Are you sure?' }  %></td>
+        
+        <td><%= link_to "DODAJ PITANJE", {:controller => "questions", :action => "new", :quiz_trenutni => quiz.id }, :class => "btn btn-warning btn-sm"%> </td>
+        <% if quiz.published %>
+        <td style="text-align: center"><%= link_to "DEACTIVATE", {:controller => "quizzes", :action => "mykvizes", :actideactiv_id => quiz.id, :status => 0}, :method => :post, :class => "btn btn-danger btn-sm", :id =>"acdequiz", data: { confirm: "Are you sure you want to deactivate this quiz?"}%> 
+        	</td>
+        <% else %>
+        <td style="text-align: center"><%= link_to "ACTIVATE", {:controller => "quizzes", :action => "mykvizes", :actideactiv_id => quiz.id, :status => 1}, :method => :post, :class => "btn btn-success btn-sm", :id =>"acdequiz" , data: { confirm: "Are you sure you want to activate this quiz?"}%> 
+        	</td>
+        <% end %>
+      </tr>

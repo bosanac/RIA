@@ -2,26 +2,49 @@
 
 <h1>Listing Questions</h1>
 
-<table>
-  <thead>
+<% if @questions.blank? %>
+<p>Nemate pristupa ili pitanje iz kviza nema kreiranih pitanja</p>
+<% else %>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+  	<b>KVIZ: </b><%=  nazivKviza params[:id_quiz]   %></div>
+  <div class="panel-body">
+<div class="table">
+<table class="table table-hover table table-bordered">
+  <thead style="background:black; color:white">
     <tr>
-      <th>String</th>
-      <th colspan="3"></th>
+      <th style="width:85%;">Pitanje</th>
+      <th style="width:5%; text-align: center">A</th>
+      <th style="width:10%" colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @questions.each do |question| %>
       <tr>
+      	<div class="row">
+      		<div class="col-md-8">
         <td><%= question.pitanje %></td>
-        <td><%= link_to 'Show', question %></td>
-        <td><%= link_to 'Edit', edit_question_path(question) %></td>
-        <td><%= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </div>
+        <div class="col-md-4">
+        
+        <td style="text-align: center"> <%= link_to formatInt(@odgovoraPoPitanju[question.id]), {:controller => "odgovors", :action => "index", :question_id => question.id }, :class => "badge" %>  </td>
+   
+        <td><%= link_to "DODAJ ODGOVOR", {:controller => "odgovors", :action => "new", :quiz_id => question.quiz_id, :question_id => question.id }, :class => "btn btn-warning btn-xs"%></td>
+        <td><%= link_to 'Edit', edit_question_path(question), :class => "btn btn-warning btn-xs" %></td>
+        <td><%= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger btn-xs" %></td>
+        </div>
+        </div>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
+</div>
+</div>
+</div>
+<% end %>
+<%= render 'layouts/btn_new_quiz_pitanje.html.erb' %>
 
-<%= link_to 'New Question', new_question_path %>

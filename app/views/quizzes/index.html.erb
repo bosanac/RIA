@@ -1,37 +1,89 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Quizzes</h1>
+<h1>Prikaz kvizova</h1>
+
 
 <% if !@quizzes.blank? %>
-<table id="tblListaKvizovi">
+
+
+
+<%= render 'layouts/search', putanja: quizzes_path, inertext: "Unesite naziv ili opis kviza za pretragu" %>
+
+
+
+<div class="panel panel-default">
+  	
+  	<div class="panel-heading">
+		 <div class="row">
+		  <div class="col-sm-9"><%= will_paginate %></div>
+		  <div class="col-sm-3" style="padding: 0px 0px 0px 120px;"><%= render 'layouts/btn_new_quiz_pitanje_dd' %></div>
+		</div>
+	</div>
+  	
+  	<div class="panel-body">
+<div class="table-responsive">
+<table class="table table-hover table table-bordered ">
   <thead>
     <tr>
-      <th>Naslov</th>
-      <th>Opis</th>
-      <th>Datumstart</th>
-      <th>Datumstop</th>
-      <th>Pokusaja</th>
-      <th colspan="3"></th>
+      <th style="width:80%">Naslov kviza</th>
+      
+      <th style="width:5%" style="text-align: center">Hits</th>
+      <th style="width:10%" style="text-align: center">Kreiran</th>
     </tr>
   </thead>
 
   <tbody>
     <% @quizzes.each do |quiz| %>
       <tr>
-        <td><%= quiz.naziv %></td>
-        <td><%= quiz.opis %></td>
-        <td><%= quiz.datumstart %></td>
-        <td><%= quiz.datumstop %></td>
-        <td><%= quiz.pokusaja %></td>
-     <% end %>   
+        <td>
+        			 <div class="row">
+		  <div class="col-sm-9">
+		  	<a href="#" data-toggle="tooltip" data-placement="right" title="<%= quiz.opis %>">
+		  	<button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#myModal_<%= quiz.id%>">
+		  	<%= quiz.naziv %>
+		  	</button>
+		  	</a>
+		  	</div>
+		  <div class="col-sm-3" style="padding: 0px 0px 0px 14%;"><%= link_to "POKRENI", {:controller => "quizzes", :action => "prepare_quiz", :id => quiz.id, :rbr=>'1'}, :class => "btn btn-warning btn-md"%>
+</div>
+		</div>
+        	
+        	        </td>
+
+
+<%= render 'layouts/modaldlg.html.erb', naslov: quiz.naziv, tekst: quiz.opis, id_div: "myModal_"+quiz.id.to_s %>
+
+        <td style="text-align: center"><%= totalQuizDone quiz.id %></td>
+        <td style="text-align: center"><%= quiz.created_at.strftime('%d.%m.%Y') %></td>
+             <% end %>   
       </tr>
 
   </tbody>
 </table>
+</div>
+	</div>
+	
+	<div class="panel-footer">
+		<%= will_paginate %>
+	</div>
+	
+</div>
+
+
+
+
+
+<% else %>
+
+<% if params[:usrid_search] %>
+<p>Trenutno nema krairanih kvizova za trazeni kriterij</p>
 <% else %>
 <p>Trenutno nema kreiran ni jedan kviz u bazi podataka
 	<%= link_to 'Kreiraj novi kviz', new_quiz_path %>
 	</p>
+<% end %>
 
 <% end %>
+
+
 <br>

@@ -1,14 +1,29 @@
 <% provide(:title, 'All users') %>
-<h1>All users</h1>
+<h1>Prikaz korisnika</h1>
+
+<%= render 'layouts/search', putanja: users_path, inertext: "Unesite pojam za pretragu korisnika" %>
+
+<div class="panel panel-default">
+  	
+  	<div class="panel-heading">
+		 <div class="row">
+		  <div class="col-sm-9"><%= will_paginate %></div>
+		  <div class="col-sm-3" style="padding: 0px 0px 0px 120px;"><%= render 'layouts/btn_new_quiz_pitanje_dd' %></div>
+		</div>
+	</div>
+  	
+  	<div class="panel-body">
+  		<ul class="users">
+  		  <% @users.each do |user| %>
+    	  <%= render user %>
+	 	  <% end %>
+		</ul>
+	</div>
+	
+	<div class="panel-footer">
+		<%= will_paginate %>
+	</div>
+	
+</div>
 
 
-<%= will_paginate %>
-
-<ul class="users">
-  <% @users.each do |user| %>
-      <%= render user %>
-  <% end %>
-</ul>
-
-
-<%= will_paginate %>
