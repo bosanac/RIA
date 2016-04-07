@@ -140,10 +140,6 @@ class QuizzesController < ApplicationController
     
     @tacni_odgovori = Odgovor.joins(:question).where(questions:{quiz_id:params[:id]}, odgovors: {tacan:1}).pluck(:id).to_a
     session[:tacni_odgovori] = @tacni_odgovori
-    
-    @tacna_pitanja = Hash.new
-    @tacna_pitanja.default(key = nil)
-    session[:tacna_pitanja] = @tacna_pitanja
    
     session[:kviz_id] = params[:id]
     session[:datstart] = DateTime.now
@@ -179,6 +175,14 @@ class QuizzesController < ApplicationController
 
   def kraj
     begin
+      
+      if session[:datstart].nil?
+        session.delete(:kviz_id)
+        flash[:danger] = "Niste ispravno pokrenuli kviz. Molimo pokusajte ponovo"
+        redirect_to action: "index"
+        return
+      end
+      
       session[:datstop] = DateTime.now
       
       @procUspjesnosti = (session[:ispravnih_odgovora].to_i*100)/session[:ukupo_pitanja].to_i
@@ -276,6 +280,7 @@ class QuizzesController < ApplicationController
       session.delete(:ukupo_pitanja)
       session.delete(:datstart)
       session.delete(:datstop)
+      session.delete(:odgovori)
     end
   
   
@@ -304,18 +309,16 @@ class QuizzesController < ApplicationController
       session[:ispravnih_odgovora] = session[:ispravnih_odgovora].to_i - 1 if @tacna_pitanja.length != @hash_temp.length
     end
     
-    hs_tmp= Hash.new
     
-    session[:odgovori].each {|id_q, id_o|
-      if id_q.to_i == id_pitanja.to_i
-        ima_odgovor_na_pitanje = true
-        break
-      end
-   }
     
-    if !ima_odgovor_na_pitanje
-      session[:odgovori][id_pitanja] = id_odgovora.to_i
-    end    
+    if session[:odgovori][id_pitanja].nil?
+      session[:odgovori][id_pitanja] = id_odgovora
+    else
+      session[:odgovori].delete(id_pitanja)
+      session[:odgovori][id_pitanja] = id_odgovora
+    end
+    
+    
     
   end
   
