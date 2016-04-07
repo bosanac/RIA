@@ -2,14 +2,9 @@
 
 <h1>Prikaz kvizova</h1>
 
-
 <% if !@quizzes.blank? %>
 
-
-
 <%= render 'layouts/search', putanja: quizzes_path, inertext: "Unesite naziv ili opis kviza za pretragu" %>
-
-
 
 <div class="panel panel-default">
   	
@@ -23,12 +18,13 @@
   	<div class="panel-body">
 <div class="table-responsive">
 <table class="table table-hover table table-bordered ">
-  <thead>
+  <thead style="background: #337AB7; color:white">
     <tr>
       <th style="width:80%">Naslov kviza</th>
       
-      <th style="width:5%" style="text-align: center">Hits</th>
-      <th style="width:10%" style="text-align: center">Kreiran</th>
+      <th style="width:5%; text-align: center">Hits</th>
+      <th style="width:10%; text-align: center">Kreiran</th>
+      <th style="width:5%; text-align: center">Lista</th>
     </tr>
   </thead>
 
@@ -44,7 +40,7 @@
 		  	</button>
 		  	</a>
 		  	</div>
-		  <div class="col-sm-3" style="padding: 0px 0px 0px 14%;"><%= link_to "POKRENI", {:controller => "quizzes", :action => "prepare_quiz", :id => quiz.id, :rbr=>'1'}, :class => "btn btn-warning btn-md"%>
+		  <div class="col-sm-3" style="padding: 0px 0px 0px 13%;"><%= link_to "POKRENI", {:controller => "quizzes", :action => "prepare_quiz", :id => quiz.id, :rbr=>'1'}, :class => "btn btn-warning btn-md"%>
 </div>
 		</div>
         	
@@ -53,8 +49,12 @@
 
 <%= render 'layouts/modaldlg.html.erb', naslov: quiz.naziv, tekst: quiz.opis, id_div: "myModal_"+quiz.id.to_s %>
 
-        <td style="text-align: center"><%= totalQuizDone quiz.id %></td>
-        <td style="text-align: center"><%= quiz.created_at.strftime('%d.%m.%Y') %></td>
+        <td style="font-size: 1.5em; text-align:center"><%= totalQuizDone quiz.id %></td>
+        <td style="font-size: 1.5em; text-align:center"><%= quiz.created_at.strftime('%d.%m.%Y') %></td>
+        <td style="font-size: 1.5em; text-align:center">
+<%= link_to "LISTA", {:controller => "quizzes", :action => "rnglist", :quiz_id => quiz.id}, :class => "btn btn-warning btn-md"%>
+
+</td>
              <% end %>   
       </tr>
 

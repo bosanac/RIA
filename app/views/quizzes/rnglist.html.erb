@@ -1,0 +1,61 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rang lista</h1>
+
+<% if !@rnglist.blank? %>
+
+<div class="panel panel-primary">
+  	
+  	<div class="panel-heading" style="font-size: 1.5em; text-align:left">Rang lista za kviz:  <%= Quiz.select("naziv").where(id: params[:quiz_id])[0][:naziv] %>
+	</div>
+  	
+  	<div class="panel-body">
+<div class="table-responsive">
+<table class="table table-hover table table-bordered ">
+  <thead style="background: #337AB7; color:white">
+    <tr>
+      <th style="width:70%">Korisnik</th>
+      <th style="width:20% font-size: 1em; text-align:center">Kviz uraden</th>
+      <th style="width:10% font-size: 1em; text-align:center">Bodova</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rnglist.each do |user_quiz| %>
+      <tr>
+      	
+        <td style="font-size: 1em; text-align:left"> <%= User.select("name").where(id: user_quiz[:user_id].to_i)[0][:name] %></td>
+		<td style="font-size: 1em; text-align:center"> <%= user_quiz[:created_at].strftime("%d.%m.%Y") %></td>
+        <td style="font-size: 1em; text-align:center; background:green; color:white"><%= user_quiz[:tacnihodg] %></td>
+             <% end %>   
+      </tr>
+
+  </tbody>
+</table>
+</div>
+	</div>
+	
+	<div class="panel-footer">
+	
+	</div>
+	
+</div>
+
+
+
+
+
+<% else %>
+
+<% if params[:usrid_search] %>
+<p>Trenutno nema krairanih kvizova za trazeni kriterij</p>
+<% else %>
+<p>Trenutno nema kreiran ni jedan kviz u bazi podataka
+	<%= link_to 'Kreiraj novi kviz', new_quiz_path %>
+	</p>
+<% end %>
+
+<% end %>
+
+
+<br>

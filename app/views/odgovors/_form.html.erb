@@ -12,20 +12,22 @@
   <% end %>
 
    		<%= f.label 'Odaberite pitanje u Vasem kvizu' %>
-   		<% if !params[:trenutno_pitanja].nil? %>
-  				<%= collection_select(:odgovor, :question_id, @pitanja_korisnika, :id, :pitanje, {:class=>'form-control'}, {:selected => @trenutno_pitanje.to_i}) %></p>
-		<% else %>
-				<%= collection_select(:odgovor, :question_id, @pitanja_korisnika, :id, :pitanje, {:class=>'form-control'}) %></p>
-		<% end %>
+   		<%= collection_select(:odgovor, :question_id, @pitanja_korisnika, :id, :pitanje, {:selected => params[:question_id].to_i}, {:class=>'form-control'}) %></p>
+
   <div class="field">
     <%= f.label "Unesite odogovor na pitanje" %><br>
     <%= f.text_area :opcija, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label "Ovaj odgovor je tacan" %><br>
-    <%= f.check_box :tacan %>
+  <div class="field" >
+  	<%= f.check_box :tacan, class:"chk_odg_tacan" %>
+    <%= f.label "Ovaj odgovor je tacan" %>
   </div>
+  <br />
   <div class="actions">
-    <%= f.submit %>
+  	<% if params[:action] == "edit"%>
+    <%= f.submit "IZMJENI ODGOVOR", class: "btn btn-primary" %>
+    <% else %>
+    <%= f.submit "KRERIAJ ODGOVOR", class: "btn btn-primary" %>
+    <% end %>
   </div>
 <% end %>

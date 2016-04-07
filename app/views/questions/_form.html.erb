@@ -12,11 +12,11 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
   	
 
    		<%= f.label 'Odaberite neki od vasih kvizova' %>
-  		<%= collection_select(:question, :quiz_id, @quizovi_korisnika, :id, :naziv, {:prompt=>true}, {:class=>'form-control'}, {:selected => nazivPitanja(params[@quiz_id_sel])}) %></p>
+  		<%= collection_select(:question, :quiz_id, @quizovi_korisnika, :id, :naziv, {:selected => session[:quiz_id]}, {:class=>'form-control'}) %></p>
 	
   </div>
   <div class="field">
@@ -24,6 +24,6 @@
     <%= f.text_area :pitanje, class: "form-control" %>
   </div>
   <div class="actions">
-    <%= f.submit 'KRERIAJ PITANJE', class: "btn btn-primary" %>
+    <%= f.submit 'KREIRAJ PITANJE', class: "btn btn-primary" %>
   </div>
 <% end %>

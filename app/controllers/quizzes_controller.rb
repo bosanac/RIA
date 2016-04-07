@@ -3,8 +3,8 @@ class QuizzesController < ApplicationController
   before_action :set_quiz, only: [:show, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
-  
   before_action :vrijemeStart, only: [:prepare_quiz]
+  after_action :ocistiSesVarijable, only: [:rezultat]
   # GET /quizzes
   # GET /quizzes.json
   
@@ -18,9 +18,11 @@ class QuizzesController < ApplicationController
     #@users = User.paginate(page: params[:page])
     
       if params[:usrid_search]
-        @quizzes = Quiz.paginate(page: params[:page]).where(published: "1", user_id: params[:usrid_search].to_i).order("created_at DESC")
+        @quizzes = Quiz.paginate(page: params[:page]).where("published = ? AND (datumstart <= ? AND datumstop >= ?) AND user_id = ?",1, DateTime.now, DateTime.now, params[:usrid_search].to_i).order("created_at DESC").order("created_at DESC")
       else
-        @quizzes = Quiz.paginate(page: params[:page]).where(published: "1").order("created_at DESC")
+        
+        
+        @quizzes = Quiz.paginate(page: params[:page]).where("((published = 1 AND (datumstart <= ? AND datumstop >= ?)) OR (published = 1 AND (datumstart is null AND datumstop is null)))", DateTime.now, DateTime.now).order("created_at DESC")
       end
     end
     
@@ -59,6 +61,14 @@ class QuizzesController < ApplicationController
     @brPitanjaPoKvizu = Question.group(:quiz_id).count
   end
 
+  def rnglist
+    if params[:quiz_id]
+      begin
+        @rnglist = Rezultat.select("user_id, quiz_id, tacnihodg, created_at").where("quiz_id = ? AND tacnihodg > 0", params[:quiz_id]).order("tacnihodg DESC")
+      rescue
+      end
+    end
+  end
   # GET /quizzes/new
   def new
    # if logged_in?
@@ -70,6 +80,7 @@ class QuizzesController < ApplicationController
 
   # GET /quizzes/1/edit
   def edit
+  
   end
 
   # POST /quizzes
@@ -81,8 +92,8 @@ class QuizzesController < ApplicationController
     @quiz.user 
     respond_to do |format|
       if @quiz.save
-        format.html { redirect_to @quiz}
-        flash[:success] = "Quiz was successfully created."
+        format.html { redirect_to myquizzes_path}
+        flash[:success] = "Uspjesno ste kreirali novi kviz [ " + @quiz.naziv + " ]"
         format.json { render :show, status: :created, location: @quiz }
       else
         format.html { render :new }
@@ -96,8 +107,8 @@ class QuizzesController < ApplicationController
   def update
     respond_to do |format|
       if @quiz.update(quiz_params)
-        format.html { redirect_to @quiz }
-        flash[:success] = "Quiz was successfully updated."
+        format.html { redirect_to myquizzes_path}
+        flash[:success] = "Uspjesno ste izmjenili kviz [ " + @quiz.naziv + " ]"
         format.json { render :show, status: :ok, location: @quiz }
       else
         format.html { render :edit }
@@ -111,41 +122,54 @@ class QuizzesController < ApplicationController
   def destroy
     @quiz.destroy
     respond_to do |format|
-      format.html { redirect_to quizzes_url, notice: 'Quiz was successfully destroyed.' }
+      format.html { redirect_to myquizzes_path}
+      flash[:success] = "Kviz [ " + @quiz.naziv + " ] uspjesno obrisan" 
+     # format.html { redirect_to quizzes_url, notice: 'Quiz was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
 
   def prepare_quiz
+    
+    if brojPokusajaPremasen(params[:id])
+      flash[:danger] = "Vi ste ispunili broj pokusaja za ovaj kviz ["  + Quiz.find(params[:id]).naziv + "]. Molimo pokusajte uraditi neki drugi kviz"
+      redirect_to quizzes_path
+      return
+    end
+    
+    @tacni_odgovori = Odgovor.joins(:question).where(questions:{quiz_id:params[:id]}, odgovors: {tacan:1}).pluck(:id).to_a
+    session[:tacni_odgovori] = @tacni_odgovori
+    
     @tacna_pitanja = Hash.new
     @tacna_pitanja.default(key = nil)
     session[:tacna_pitanja] = @tacna_pitanja
    
     session[:kviz_id] = params[:id]
-   # session[:pitanja] = Question.where("quiz_id = ?", params[:id])
     session[:datstart] = DateTime.now
     session[:datstop] = nil
     session[:ukupo_pitanja]   = Question.where("quiz_id = ?", params[:id]).count.to_i
     session[:trenutno_pitanje] = 0
     session[:ispravnih_odgovora] = 0
-
+    
+    @odgovori_na_pitanja = Hash.new
+    @odgovori_na_pitanja.default(key = nil)
+    session[:odgovori] = @odgovori_na_pitanja
     redirect_to action: "start", id: params[:id], rbr: params[:rbr]
   end
 
   def start
   
     if session[:datstop].nil?
+      @tacni_odgovori = session[:tacni_odgovori]
       @ukupnoPitanja = session[:ukupo_pitanja]
       @rbrPitanja = params[:rbr]
       session[:trenutno_pitanje] = @rbrPitanja.to_i
       @quiz = Quiz.find(params[:id])
       @question_of_quiz = Question.where("quiz_id = ?", params[:id])
-      @odgovor = Odgovor.new
-    #  session.delete(:datstart)
-    #  session[:datstart] = DateTime.new(2012, 8, 29, 22, 35, 0)
+      @odgovor = Odgovor.new  
     else
-      
+
     end
     
     eval_odgovor(params[:odgovorid], Odgovor.select("question_id").where(id:params[:odgovorid])[0].question_id) if !params[:odgovorid].nil?
@@ -154,13 +178,6 @@ class QuizzesController < ApplicationController
   
 
   def kraj
-    
-    
-  #  session[:datstop] = DateTime.now
-  #  @procUspjesnosti = (session[:ispravnih_odgovora].to_i*100)/session[:ukupo_pitanja].to_i
-  #  @tacnoOdgovorenih = session[:ispravnih_odgovora].to_i
-  #  @ukupnoPitanja = session[:ukupo_pitanja].to_i
-    
     begin
       session[:datstop] = DateTime.now
       
@@ -172,11 +189,7 @@ class QuizzesController < ApplicationController
     rescue
       
     end
-    
-   #@diff = (session[:datstop].to_datetime - session[:datstart].to_datetime).to_s
-    #flash[:succes] = "Startano: " + session[:datstart] + " ukupno: " + @diff
-   # flash[:success] = "Broj tacnih odgovora: " + @startTime + " " + "Tacna pitanja odgovorena: " + session[:tacna_pitanja].keys.to_s + " - " + session[:tacna_pitanja].values.to_s
-  end
+ end
   
   def rezultat
     
@@ -184,13 +197,36 @@ class QuizzesController < ApplicationController
   
   private
   
+  def brojPokusajaPremasen(id_kviza)
+    begin
+      br_pokusaja_kviza = Quiz.select("pokusaja").where(id: id_kviza)[0].pokusaja.to_i
+      
+      if br_pokusaja_kviza.nil?
+        return true
+      end
+      
+      if br_pokusaja_kviza == 0
+        return false
+      else
+        br_uradenih = Rezultat.where(quiz_id: 12, user_id: 102).count.to_i
+        
+        if br_uradenih < br_pokusaja_kviza
+          return false
+        else
+          return true
+        end
+      end
+    rescue
+      return false
+    end
+  end
+  
   def isQuizValid(id, status)
     if Question.where(quiz_id: id).count == 0
       # kviz nema definisanih pitanja
-      Hash["valid" => false, "poruka" => "Nemate definisanih pitanja u Vasem kvizu = >"  + Quiz.find(id).naziv]
+      Hash["valid" => false, "poruka" => "Nemate definisanih pitanja u Vasem kvizu ["  + Quiz.find(id).naziv] + "]"
     else
       # provjerimo da li su sva pitanja regularna idemo pitanje po pitanje
-      
       pitanja_kviza = Question.where(quiz_id: id)
       brOdogovoraPoPitanju = 0
       nazivKviza = Quiz.find(id).naziv
@@ -230,7 +266,7 @@ class QuizzesController < ApplicationController
         txt_status = "deaktivirali"
       end
 
-      Hash["valid" => true, "poruka" => "Uspjesno ste " + txt_status + " kviz =>"  + Quiz.find(id).naziv]
+      Hash["valid" => true, "poruka" => "Uspjesno ste " + txt_status + " kviz ['"  + Quiz.find(id).naziv + "']"]
     end
     
   end
@@ -238,7 +274,8 @@ class QuizzesController < ApplicationController
     def ocistiSesVarijable
       session.delete(:ispravnih_odgovora)
       session.delete(:ukupo_pitanja)
-      session.delete(:ispravnih_odgovora)
+      session.delete(:datstart)
+      session.delete(:datstop)
     end
   
   
@@ -248,13 +285,17 @@ class QuizzesController < ApplicationController
     end
 
   def upisiRezultat(postotak, tacnih_odgovora)  
-    @rz = Rezultat.create(postotak: postotak, tacnihodg: tacnih_odgovora, dtstart: session[:datstart], dtkraj: session[:datstop], quiz_id: session[:quiz_id], user_id: session[:user_id])  
+    @rz = Rezultat.create(postotak: postotak, tacnihodg: tacnih_odgovora, dtstart: session[:datstart], dtkraj: session[:datstop], quiz_id: session[:kviz_id], user_id: session[:user_id])  
   end
   
   def eval_odgovor(id_odgovora, id_pitanja)
-    if Odgovor.where("id=? AND tacan=?", id_odgovora,true).count.to_i == 1
+    
+    ima_odgovor_na_pitanje = false
+    
+    if session[:tacni_odgovori].include? id_odgovora.to_i
+    #if Odgovor.where("id=? AND tacan=?", id_odgovora,true).count.to_i == 1
      session[:tacna_pitanja][id_pitanja] = id_odgovora.to_i 
-     session[:ispravnih_odgovora] = session[:ispravnih_odgovora].to_i + 1
+     session[:ispravnih_odgovora] = session[:ispravnih_odgovora].to_i + 1   
     else
       @tacna_pitanja = session[:tacna_pitanja]
       @hash_temp = Hash.new
@@ -262,8 +303,22 @@ class QuizzesController < ApplicationController
       session[:tacna_pitanja] = @hash_temp
       session[:ispravnih_odgovora] = session[:ispravnih_odgovora].to_i - 1 if @tacna_pitanja.length != @hash_temp.length
     end
+    
+    hs_tmp= Hash.new
+    
+    session[:odgovori].each {|id_q, id_o|
+      if id_q.to_i == id_pitanja.to_i
+        ima_odgovor_na_pitanje = true
+        break
+      end
+   }
+    
+    if !ima_odgovor_na_pitanje
+      session[:odgovori][id_pitanja] = id_odgovora.to_i
+    end    
+    
   end
-
+  
   def vrijemeStart
     session[:datstart] = DateTime.now
   end
@@ -278,15 +333,16 @@ class QuizzesController < ApplicationController
       end
     end
     
-         # Confirms the correct user.
+   # Confirms the correct user.
     def correct_user
       @quiz_correct = Quiz.where("user_id = ? AND id = ?", session[:user_id], params[:id]).take
       if @quiz_correct.nil?
-        redirect_to(root_url) 
+        flash[:danger] = "Nemate pravo pristupa ovom kvizu"
+        redirect_to myquizzes_path 
       end
     end
-    
-    # Never trust parameters from the scary internet, only allow the white list through.
+
+
     def quiz_params
       params.require(:quiz).permit(:naziv, :opis, :datumstart, :datumstop, :pokusaja, :user_id)
     end

@@ -24,25 +24,30 @@
     <%= f.label :opis %><br>
     <%= f.text_area :opis, class: 'form-control', placeholder: "Unesite opis Vaseg kvizi ili kratko uspustvo" %>
                
-        <%= f.label 'Kviz je aktivan OD-DO datuma' %><br>        
-
- <div class="input-group input-daterange">
+   <%= f.label 'Kviz je aktivan OD-DO datuma' %><br>        
+ <div class="input-group input-daterange" data-date-format="dd-mm-yyyy">
  	<%= f.text_field :datumstart, class: 'form-control', placeholder: 'Aktivan OD' %>
     <span class="input-group-addon"> DO </span>
-    <%= f.text_field :datumstop, class: 'form-control', placeholder: "Aktivan DO"%>
-
+    <%= f.text_field :datumstop, class: 'form-control', placeholder: "Aktivan DO", :value => 'df'%>
 </div>
 
 <br>
 	<!--
+		<input type="text" class="form-control" value="<%= datumOdKviza(params[:id]) %>">
     <input type="text" class="form-control" value="2012-04-05">
 	-->
 	
     <%= f.label 'Broj pokusaja' %><br>
     <%= f.number_field :pokusaja, class: 'form-control', min: 0, placeholder: "(ostavite prazno ili 0 za neogranicen broj pokusaja)"%>
 
-  <!-- <div class="actions"> -->
+  <div class="actions">
+  	<% if params[:action] == "edit" %>
+    <%= f.submit "SNIMI PROMJENE", class: "btn btn-primary" %>
+    <% else %>
     <%= f.submit "KREIRAJ KVIZ", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
   <!--</div> -->
   </div>
 

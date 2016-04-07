@@ -1,19 +1,17 @@
 class OdgovorsController < ApplicationController
   before_action :set_odgovor, only: [:show, :edit, :update, :destroy]
-  #before_action :prethodni_url, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
+  
   # GET /odgovors
   # GET /odgovors.json
   def index
     @odgovors = Odgovor.where("question_id = ?", params[:question_id])
-    
     begin
-      session.delete[:question_id]
+      session[:question_id] = params[:question_id]
     rescue
       
     end
-    
-  #      @questions = Question.where("quiz_id = ?", params[:id_quiz])
-   # @odgovoraPoPitanju = Odgovor.group(:question_id).count
   end
 
   # GET /odgovors/1
@@ -23,6 +21,8 @@ class OdgovorsController < ApplicationController
 
   # GET /odgovors/new
   def new
+    session[:question_id] = params[:id_pitanja]
+    
     @odgovor = Odgovor.new
     
     #ukoliko imamo postavljen parametar question_id odabiremo to trenutno pitanje
@@ -33,56 +33,46 @@ class OdgovorsController < ApplicationController
 
     @trenutno_pitanje = params[:question_id]
     @trenutni_kviz = params[:quiz_id]
-    session[:question_id] = @trenutni_kviz
+    session[:question_id] = @trenutno_pitanje
     session[:quiz_id] = @trenutni_kviz
-   # if params[:pitanje_trenutno].nil?
-    #  @pitanja_korisnika = Odgovor.where("user_id = ?", session[:user_id])
-    #else 
-   # session[:id_pitanja] ||= params[:pitanje_trenutno]
-      #@pitanja_korisnika =  Odgovor.joins(:question).where("quiz_id = ?", session[:id_pitanja])
       if !params[:quiz_id].nil?
         @pitanja_korisnika =  Question.where("quiz_id = ?", params[:quiz_id])
       else
         @pitanja_korisnika = Question.where(quiz_id: Quiz.select("id").where(user_id: session[:user_id]).pluck(:id))
       end 
-      #Question.where("question_id = ?", params[:pitanje_trenutno])
-    #end
-   # session[:id_pitanja] ||= params[:pitanje_trenutno]
-    #flash[:success] = @trenutni_kviz + " " + @trenutno_pitanje  
   end
 
   # GET /odgovors/1/edit
   def edit
-    @pitanja_korisnika =  Question.where("quiz_id = ?", session[:question_id])
-    session[:return_to] ||= request.referer
+    @pitanja_korisnika =  Question.where(quiz_id: Quiz.select("id").where(user_id: session[:user_id]).pluck(:id))
+    
   end
 
   # POST /odgovors
   # POST /odgovors.json
   def create
     @greska = false
-    
-    if params[:tacan] == 1 && brojTacnihOdgovora(session[:question_id])
-      
+    @odgovor = Odgovor.new(odgovor_params)
+   
+    if @odgovor.tacan && brojTacnihOdgovora(session[:question_id]) == 1
       @pitanja_korisnika =  Question.where("quiz_id = ?", session[:quiz_id])
       @greska = true;
-      
+      #redirect_to action: 'new', question_id: session[:question_id]
     end
     
     @odgovor = Odgovor.new(odgovor_params)
-    
-    #@odgovor.update(question_id: session.delete(:id_pitanja))
-    
+
     respond_to do |format|
       if @greska
         flash[:danger] = "Vec imate postavljen jedan odgovor na tacan"
         @pitanja_korisnika =  Question.where("quiz_id = ?", session[:question_id])
-        format.html { render :new }
-        format.json { render json: @odgovor.errors, status: :unprocessable_entity }
+        redirect_to action: 'index', question_id: session[:question_id] 
+        return
       end
       
       if @odgovor.save
-        format.html { redirect_to @odgovor, notice: 'Odgovor was successfully created.' }
+        flash[:success] = "Uspjesno ste dodali novi odgovor na pitanje"
+        format.html { redirect_to action: 'index', question_id: session[:question_id]}
         format.json { render :show, status: :created, location: @odgovor }
         
         begin
@@ -92,7 +82,8 @@ class OdgovorsController < ApplicationController
         rescue
         end
       else
-        @pitanja_korisnika =  Question.where("quiz_id = ?", session[:question_id])
+   
+        @pitanja_korisnika = Question.where(quiz_id: Quiz.select("id").where(user_id: session[:user_id]).pluck(:id))
         format.html { render :new }
         format.json { render json: @odgovor.errors, status: :unprocessable_entity }
       end
@@ -107,8 +98,7 @@ class OdgovorsController < ApplicationController
     respond_to do |format|
       if @odgovor.update(odgovor_params)
         flash[:success] = "Uspjesno ste azurirali Vas odgovor na pitanje"
-        #redirect_to 
-        format.html { render :show}
+        format.html { redirect_to action: 'index', question_id: session[:question_id]}
         format.json { render :show, status: :ok, location: @odgovor }
       else
         format.html { render :edit }
@@ -122,7 +112,8 @@ class OdgovorsController < ApplicationController
   def destroy
     @odgovor.destroy
     respond_to do |format|
-      format.html { redirect_to odgovors_url, notice: 'Odgovor was successfully destroyed.' }
+      flash[:warning] = "Uspjesno obrisan odogovor na pitanje"
+      format.html { redirect_to action: 'index', question_id: session[:question_id] }
       format.json { head :no_content }
     end
   end
@@ -138,11 +129,40 @@ class OdgovorsController < ApplicationController
     end
     
     def brojTacnihOdgovora(idPitanja)
-      Odgovor.where("question_id = ? AND tacan = ?", idPitanja,true).count
+      Odgovor.where("question_id = ? AND tacan = ?", idPitanja,true).count.to_i
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def odgovor_params
       params.require(:odgovor).permit(:opcija, :tacan, :question_id)
     end
+    
+    def logged_in_user
+      unless logged_in?
+        #store_location
+        flash[:danger] = "Molimo da se logujete na sistem"
+        redirect_to login_url
+      end
+    end
+    
+    
+    # provjera da li trazeni odgovor pripada datom logovano korisniku
+    def correct_user
+      @question_id_array_korisnika = Question.select("id").where(quiz_id: Quiz.select("id").where(user_id: session[:user_id])).map{|pitanje| pitanje.id}
+      @odgovor_trazeni = Odgovor.where("id = ?", params[:id]).take
+      @validan_odgovor = false
+      
+      @question_id_array_korisnika.each do |id_pitanja|
+        if id_pitanja.to_i == @odgovor_trazeni[:question_id].to_i
+          @validan_odgovor = true
+          break
+        end
+      end
+      
+      if !@validan_odgovor
+        flash[:danger] = "Nemate pravo pristupa ovom odgovoru"
+        redirect_to myquizzes_path
+      end
+    end
+    
+    
 end

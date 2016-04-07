@@ -2,14 +2,14 @@
  <nav class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">
-      	<%= link_to "quizland", root_path, id: "logo" %></a>
+      
+      	<%= link_to "quizland", root_path, id: "logo" %>
     </div>
       <ul class="nav navbar-nav">
-        <li><%= link_to "Home", root_path %></li>
-        <li><%= link_to "Help", help_path %></li>
-        <li><%= link_to "About", about_path %></li>
-        <li><%= link_to "Contact", contact_path %></li>
+        <li><%= link_to "Pocetna", root_path%></li>
+        <li><%= link_to "Pomoc", help_path %></li>
+        <li><%= link_to "O aplikaciji", about_path %></li>
+        <li><%= link_to "Kontakt", contact_path %></li>
       </ul>
     <ul class="nav navbar-nav navbar-right">
     	<% if logged_in? %>

@@ -19,7 +19,7 @@
 //= require bootstrap
 
 $(document).ready(function() {  
-	
+
 
 	$('[data-toggle="tooltip"]').tooltip(); 
 	
@@ -57,14 +57,25 @@ $(document).ready(function() {
 	
 //	alert('test')
 	$('#quiz_datumstart').click(function()
-	{
+	{format: 'dd-mm-yyyy'
+		//alert('test dtpPicker');
+		 $(this).datepicker();
+		 $('#quiz_datumstart').datepicker('update');
+	});
+	
+		$('#quiz_datumstop').click(function()
+	{format: 'dd-mm-yyyy'
 		//alert('test dtpPicker');
 		 $(this).datepicker();
 		 $('#quiz_datumstart').datepicker('update');
 	});
 
 $('.input-daterange input').each(function() {
+	 
     $(this).datepicker("clearDates");
 });
+	
+	
+	
 	
 })

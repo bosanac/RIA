@@ -1,15 +1,15 @@
 <br><br>
 <div class="panel-group">
   <div class="panel panel-primary">
-  	<div class="panel-heading"><h1>REZULTAT:  <%= (session[:ispravnih_odgovora].to_i*100)/session[:ukupo_pitanja].to_i %> %</h1></div>
+  	<div class="panel-heading"><h1>REZULTAT:  <%= (session[:tacna_pitanja].length*100)/session[:ukupo_pitanja].to_i %> %</h1></div>
   	<div class="panel-body" style="text-align: center"><h4>Odgovoreno tacno na <b><%= session[:tacna_pitanja].length %></b> od ukupno <b><%= session[:ukupo_pitanja].to_i %></b> pitanja</h4>
   	
   		
   		
 
   	</div>
-  	<% if session[:tacna_pitanja].length.to_i > 0 %>
-  	<div class="panel-footer"><button style="width: 40%; margin-left:30%" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Prikazi tacne odgovore</button></div>	
+  	<% if session[:odgovori].length.to_i > 0 %>
+  	<div class="panel-footer"><button style="width: 40%; margin-left:30%" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Prikazi detalje odgovora na pitanja</button></div>	
   	<% end %>
   </div>
 
@@ -23,23 +23,36 @@
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background: #337AB7; color:white">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Tacni odgovori</h4>
+        <h4 class="modal-title">Odgovori na pitanja</h4>
       </div>
       <div class="modal-body">
           					
   						<%
-  							session[:tacna_pitanja].each {|id_pitanja, id_odgovora| %>
-  								<div class="well well-sm">
-	  								<h4>Pitanje: <%=nazivPitanja id_pitanja%></h4>
-	  								<h5>Odgovor: <%=nazivOdgovora id_odgovora%></h5>
+  							session[:odgovori].each {|id_pitanja, id_odgovora| %>
+  								<% if session[:tacni_odgovori].include? id_odgovora.to_i %>
+  								<div class="panel panel-success">
+  									 <div class="panel-heading">
+	  								<h4>Pitanje: <%=nazivPitanja id_pitanja %></h4>
+	  								<h5>Vas odgovor: <%=nazivOdgovora id_odgovora.to_s %></h5>
+	  								</div>
   								</div>
+  								<% else %>
+  								<div class="panel panel-danger">
+  									 <div class="panel-heading">
+	  								<h4>Pitanje: <%=nazivPitanja id_pitanja%></h4>
+	  								<h5>Vas odgovor: <%=nazivOdgovora id_odgovora.to_s %></h5>
+	  								<hr />
+	  								<h5>Tacan odgovor: <%=nazviTacnogOdgovora id_pitanja%></h5>
+	  								</div>
+  								</div>
+  								<% end %>
   						<%	} %>
 
 					
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="background: #337AB7; color:white">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>

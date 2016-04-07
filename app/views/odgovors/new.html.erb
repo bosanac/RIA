@@ -1,5 +1,9 @@
-<h1>New Odgovor</h1>
+<h1>Novi odgovor na pitanje</h1>
+
+<div style="float:right">
+<%= link_to 'Nazad', myquizzes_path, class: "btn btn-default"%>
+</div>
+<br />
 
 <%= render 'form' %>
 
-<%= link_to 'Back', odgovors_path %>

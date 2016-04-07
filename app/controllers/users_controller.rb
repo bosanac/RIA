@@ -46,6 +46,7 @@ class UsersController < ApplicationController
     # Uspjesno popunjen i sacuvan korisnik
       log_in @user
       flash[:success] = "Dobro dosli, uspjesno ste kreirali korisnicki nalog!"
+      Notifier.signup_email(@user).deliver
       redirect_to @user
     else
     # Nije uspjesno sacuvan korisnik

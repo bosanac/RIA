@@ -5,7 +5,7 @@ class Quiz < ActiveRecord::Base
   validates_presence_of :naziv, :message=>"Morate popuniti naziv Vaseg kviza", length: { maximum: 255 }
   
   def self.search(search)
-    where("naziv LIKE ? OR opis LIKE ?", "%#{search}%", "%#{search}%") 
+    where("(naziv LIKE ? OR opis LIKE ?) AND (published = ? AND (datumstart <= ? AND datumstop >= ?))", "%#{search}%", "%#{search}%",1, DateTime.now, DateTime.now) 
     #where("opis LIKE ?", "%#{search}%")
   end
   

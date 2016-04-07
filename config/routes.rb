@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   
   
   post 'quizzes/start' => 'quizzes#start'
-  
+  get 'quizzes/rnglist' => 'quizzes#rnglist'
   get 'quizzes/rezultat' => 'quizzes#rezultat'
   get 'quizzes/prepare_quiz' => 'quizzes#prepare_quiz'
   

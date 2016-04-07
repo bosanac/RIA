@@ -236,6 +236,17 @@ input {
   //border:1px solid gray;
 }
 
+.chk_new_odg input[type="radio"]
+{
+  position: relative;
+  opacity: 0;
+  -moz-opacity: 0;
+  -webkit-opacity: 0;
+  -o-opacity: 0;
+  border: 1px solid blue;
+}
+
+
 #new_odgovor input[type="radio"] {
   position: relative;
   opacity: 0;
@@ -275,12 +286,60 @@ input {
   -o-box-shadow: inset 0px 0px 0px 2px white;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
+  
   -o-border-radius: 8px;
 }
 
 #new_odgovor input[type="radio"]:checked + label:before {
   background: #337AB7;
 }
+
+.navbar-inverse .navbar-nav > li > a
+{
+  color:white
+}
+
+.navbar-inverse .navbar-nav > li:hover
+{
+  background:black
+}
+
+
+.navbar
+{
+  background: #337AB7
+}
+
+
+.chk_odg_tacan
+{
+  width: 2%;
+  paddgin-left: 0px;
+  paddgin-top: 0px;
+  margin-top: 0px;
+  margin-left: 0px;
+  float:left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
