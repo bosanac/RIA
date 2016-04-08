@@ -13,16 +13,10 @@ class QuizzesController < ApplicationController
     if !params[:search].nil?
       @quizzes = Quiz.search(params[:search]).order("created_at DESC").paginate(page: params[:page])
     else
-    # @quiz = Quiz.new
-   # @quizzes = Quiz.all
-    #@users = User.paginate(page: params[:page])
-    
       if params[:usrid_search]
-        @quizzes = Quiz.paginate(page: params[:page]).where("published = ? AND (datumstart <= ? AND datumstop >= ?) AND user_id = ?",1, DateTime.now, DateTime.now, params[:usrid_search].to_i).order("created_at DESC").order("created_at DESC")
+        @quizzes = Quiz.paginate(page: params[:page]).where("published = ? AND ((datumstart <= ? AND datumstop >= ?) OR (datumstart = datumstop)) AND user_id = ?",1, DateTime.now, DateTime.now, params[:usrid_search].to_i).order("created_at DESC").order("created_at DESC")
       else
-        
-        
-        @quizzes = Quiz.paginate(page: params[:page]).where("((published = 1 AND (datumstart <= ? AND datumstop >= ?)) OR (published = 1 AND (datumstart is null AND datumstop is null)))", DateTime.now, DateTime.now).order("created_at DESC")
+        @quizzes = Quiz.paginate(page: params[:page]).where("((published = 1 AND (datumstart <= ? AND datumstop >= ?)) OR (published = 1 AND (datumstart = datumstop)))", DateTime.now, DateTime.now).order("created_at DESC")
       end
     end
     
@@ -88,10 +82,13 @@ class QuizzesController < ApplicationController
   def create
     parametri = quiz_params
     parametri[:user_id] = session[:user_id]
+       
     @quiz = Quiz.new(parametri)
     @quiz.user 
     respond_to do |format|
       if @quiz.save
+        provjeriDatumPokusaje(@quiz, parametri[:datumstart], parametri[:datumstop])
+                
         format.html { redirect_to myquizzes_path}
         flash[:success] = "Uspjesno ste kreirali novi kviz [ " + @quiz.naziv + " ]"
         format.json { render :show, status: :created, location: @quiz }
@@ -107,6 +104,7 @@ class QuizzesController < ApplicationController
   def update
     respond_to do |format|
       if @quiz.update(quiz_params)
+        provjeriDatumPokusaje(@quiz, quiz_params[:datumstart], quiz_params[:datumstop])
         format.html { redirect_to myquizzes_path}
         flash[:success] = "Uspjesno ste izmjenili kviz [ " + @quiz.naziv + " ]"
         format.json { render :show, status: :ok, location: @quiz }
@@ -200,6 +198,29 @@ class QuizzesController < ApplicationController
   end
   
   private
+  
+  def provjeriDatumPokusaje(kviz, datumstart, datumstop)
+    
+    
+    if kviz[:datumstart].nil?
+      kviz[:datumstart] = DateTime.now
+    else
+      kviz[:datumstart] = datumstart.sub("/",".")
+     end
+      
+        
+    if kviz[:datumstop].nil?
+      kviz[:datumstop] = DateTime.now
+    else
+      kviz[:datumstop] = datumstop.sub("/",".")
+    end
+        
+    if kviz[:pokusaja].nil?
+       kviz[:pokusaja] = 0
+    end
+        
+    kviz.save
+  end
   
   def brojPokusajaPremasen(id_kviza)
     begin

@@ -24,12 +24,13 @@
     <%= f.label :opis %><br>
     <%= f.text_area :opis, class: 'form-control', placeholder: "Unesite opis Vaseg kvizi ili kratko uspustvo" %>
                
-   <%= f.label 'Kviz je aktivan OD-DO datuma' %><br>        
- <div class="input-group input-daterange" data-date-format="dd-mm-yyyy">
- 	<%= f.text_field :datumstart, class: 'form-control', placeholder: 'Aktivan OD' %>
-    <span class="input-group-addon"> DO </span>
-    <%= f.text_field :datumstop, class: 'form-control', placeholder: "Aktivan DO", :value => 'df'%>
-</div>
+   <%= f.label 'Kviz je aktivan OD-DO datuma' %><br>       
+   <%= f.text_field :datumstart, class: 'form-control', placeholder: 'Aktivan OD',  style: 'float: left; width: 42%; display: block'%>
+   <span class="input-group-addon" style= "float: left; width: 10%; display: block; margin: 0.5% 2% 0 2%"> DO </span>
+    <%= f.text_field :datumstop, class: 'form-control', placeholder: "Aktivan DO", style: 'float: left; width: 42%; display: block' %>
+    
+    
+
 
 <br>
 	<!--
