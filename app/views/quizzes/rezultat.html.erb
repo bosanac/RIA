@@ -1,8 +1,8 @@
 <br><br>
 <div class="panel-group">
   <div class="panel panel-primary">
-  	<div class="panel-heading"><h1>REZULTAT:  <%= (session[:tacna_pitanja].length*100)/session[:ukupo_pitanja].to_i %> %</h1></div>
-  	<div class="panel-body" style="text-align: center"><h4>Odgovoreno tacno na <b><%= session[:tacna_pitanja].length %></b> od ukupno <b><%= session[:ukupo_pitanja].to_i %></b> pitanja</h4>
+  	<div class="panel-heading"><h1>REZULTAT:  <%= (@broj_tacnih_pitanja*100)/  @ukupno_pitanja %> %</h1></div>
+  	<div class="panel-body" style="text-align: center"><h4>Odgovoreno tacno na <b><%= @broj_tacnih_pitanja %></b> od ukupno <b><%=   @ukupno_pitanja %></b> pitanja</h4>
   	
   		
   		

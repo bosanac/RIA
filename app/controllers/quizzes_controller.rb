@@ -149,6 +149,11 @@ class QuizzesController < ApplicationController
     @odgovori_na_pitanja = Hash.new
     @odgovori_na_pitanja.default(key = nil)
     session[:odgovori] = @odgovori_na_pitanja
+    
+    ession[:tacni_odgovori]
+    @broj_tacnih_pitanja = session[:tacna_pitanja].length.to_i 
+    @ukupno_pitanja = session[:ukupo_pitanja].to_i 
+    
     redirect_to action: "start", id: params[:id], rbr: params[:rbr]
   end
 
@@ -194,7 +199,9 @@ class QuizzesController < ApplicationController
  end
   
   def rezultat
-    
+    @tacni_odgovori = session[:tacni_odgovori]
+    @broj_tacnih_pitanja = session[:tacna_pitanja].length.to_i 
+    @ukupno_pitanja = session[:ukupo_pitanja].to_i 
   end
   
   private
@@ -249,7 +256,7 @@ class QuizzesController < ApplicationController
   def isQuizValid(id, status)
     if Question.where(quiz_id: id).count == 0
       # kviz nema definisanih pitanja
-      Hash["valid" => false, "poruka" => "Nemate definisanih pitanja u Vasem kvizu ["  + Quiz.find(id).naziv] + "]"
+      Hash["valid" => false, "poruka" => "Nemate definisanih pitanja u Vasem kvizu ["  + Quiz.find(id).naziv.to_s + "]"]
     else
       # provjerimo da li su sva pitanja regularna idemo pitanje po pitanje
       pitanja_kviza = Question.where(quiz_id: id)
@@ -298,10 +305,8 @@ class QuizzesController < ApplicationController
   
     def ocistiSesVarijable
       session.delete(:ispravnih_odgovora)
-      session.delete(:ukupo_pitanja)
       session.delete(:datstart)
       session.delete(:datstop)
-      session.delete(:odgovori)
     end
   
   
